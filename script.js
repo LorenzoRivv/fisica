@@ -10,6 +10,15 @@ const formulasPorTema = {
     { id: "fuerza", nombre: "Fuerza (F = m·a)" },
   ],
   energia: [{ id: "energia", nombre: "Energía cinética (Ec = ½·m·v²)" }],
+  calorimetria: [
+    { id: "calor", nombre: "Calor (Q = m·c·ΔT)" },
+    { id: "calorLatente", nombre: "Calor Latente (Q = m·L)" },
+  ],
+  electrostatica: [
+    { id: "coulomb", nombre: "Ley de Coulomb (F = k·|q₁·q₂| / r²)" },
+    { id: "campo", nombre: "Campo eléctrico (E = k·|q| / r²)" },
+    { id: "fuerza_campo", nombre: "Fuerza sobre una carga (F = q·E)" },
+  ],
 };
 
 function cargarFormulas() {
@@ -41,6 +50,7 @@ function mostrarCampos() {
   const formulario = document.getElementById("formulario");
   let html = "";
 
+  //    --- Cinematica ---
   if (formula === "velocidad") {
     html += `
             <p>$v = \\frac{e}{t}$</p>
@@ -67,6 +77,8 @@ function mostrarCampos() {
             <label>a (m/s²): <input type="number" id="a"></label>
             <label>t (s): <input type="number" id="t"></label>
         `;
+
+    //    --- Dinamica ---
   } else if (formula === "masa") {
     html += `
             <p>$m = \\frac{P}{g}$</p>
@@ -79,14 +91,50 @@ function mostrarCampos() {
             <label>m (kg): <input type="number" id="m"></label>
             <label>a (m/s²): <input type="number" id="a"></label>
         `;
+
+    //    --- Trabajo Y Energia ---
   } else if (formula === "energia") {
     html += `
             <p>$E_c = \\frac{1}{2} m \\cdot v^2$</p>
             <label>m (kg): <input type="number" id="m"></label>
             <label>v (m/s): <input type="number" id="v"></label>
         `;
-  }
 
+    //    --- Calorimetria ---
+  } else if (formula === "calor") {
+    html += `
+            <p>$Q = m \\cdot c \\cdot \\Delta T$</p>
+            <label>m (const): <input type="number" id="m"></label>
+            <label>c (const): <input type="number" id="c"></label>
+            <label>ΔT (s): <input type="number" id="T"></label>
+        `;
+  } else if (formula === "calorLatente") {
+    html += `
+            <p>$Q = m \\cdot L$</p>
+            <label>m (kg): <input type="number" id="m"></label>
+            <label>L (J): <input type="number" id="L"></label>
+        `;
+    //    --- Electrostatica ---
+  } else if (formula === "coulomb") {
+    html += `
+          <p>$F = k \\cdot \\frac{|q_1 \\cdot q_2|}{d^2}$</p>
+          <label>q1 (C): <input type="number" id="q1"></label>
+          <label>q2 (C): <input type="number" id="q2"></label>
+          <label>d (m): <input type="number" id="m"></label>
+      `;
+  } else if (formula === "campo") {
+    html += `
+          <p>$E = k \\cdot \\frac{|q|}{d^2}$</p>
+          <label>m (kg): <input type="number" id="m"></label>
+          <label>v (m/s): <input type="number" id="v"></label>
+      `;
+  } else if (formula === "fuerza_campo") {
+    html += `
+          <p>$F = q \\cdot E$</p>
+          <label>m (kg): <input type="number" id="m"></label>
+          <label>v (m/s): <input type="number" id="v"></label>
+      `;
+  }
   formulario.innerHTML = html;
   document.getElementById("resultado").innerHTML = "";
 
@@ -99,6 +147,7 @@ function calcular() {
   const formula = document.getElementById("formula").value;
   let resultado = "";
 
+  //    --- Cinematica ---
   if (formula === "velocidad") {
     const e = parseFloat(document.getElementById("e").value);
     const t = parseFloat(document.getElementById("t").value);
@@ -114,7 +163,7 @@ function calcular() {
     if (isNaN(v) || isNaN(t)) {
       resultado = "Completá todos los campos.";
     } else {
-      const a = v/t;
+      const a = v / t;
       resultado = `a = ${a.toFixed(2)} m/s²`;
     }
   } else if (formula === "espacioAcel") {
@@ -124,7 +173,7 @@ function calcular() {
     if (isNaN(v0) || isNaN(a) || isNaN(t)) {
       resultado = "Completá todos los campos.";
     } else {
-      const e = v0*t + a * (t**2);
+      const e = v0 * t + a * t ** 2;
       resultado = `e = ${e.toFixed(2)} m`;
     }
   } else if (formula === "mruv") {
@@ -137,13 +186,15 @@ function calcular() {
       const v = v0 + a * t;
       resultado = `v = ${v.toFixed(2)} m/s`;
     }
-} else if (formula === "masa") {
+
+    //    --- Dinamica ---
+  } else if (formula === "masa") {
     const p = parseFloat(document.getElementById("P").value);
     const g = parseFloat(document.getElementById("g").value);
-    if (isNaN(p) || isNaN(g) ) {
+    if (isNaN(p) || isNaN(g)) {
       resultado = "Completá todos los campos.";
     } else {
-      const m = p/g;
+      const m = p / g;
       resultado = `m = ${m.toFixed(2)} N`;
     }
   } else if (formula === "fuerza") {
@@ -155,6 +206,19 @@ function calcular() {
       const f = m * a;
       resultado = `F = ${f.toFixed(2)} N`;
     }
+
+    //    --- Trabajo Y Energia ---
+  } else if (formula === "energia") {
+    const m = parseFloat(document.getElementById("m").value);
+    const v = parseFloat(document.getElementById("v").value);
+    if (isNaN(m) || isNaN(v)) {
+      resultado = "Completá todos los campos.";
+    } else {
+      const ec = 0.5 * m * v * v;
+      resultado = `Ec = ${ec.toFixed(2)} J`;
+    }
+
+    //    --- Calorimetria ---
   } else if (formula === "energia") {
     const m = parseFloat(document.getElementById("m").value);
     const v = parseFloat(document.getElementById("v").value);
@@ -167,10 +231,9 @@ function calcular() {
   }
 
   document.getElementById("resultado").innerHTML = resultado;
-  if(resultado != 'Completá todos los campos.' || resultado){
-    document.getElementById("copiar-btn").style = "display:block;"
+  if (resultado != "Completá todos los campos." || resultado) {
+    document.getElementById("copiar-btn").style = "display:block;";
   }
-  
 }
 
 function copiarResultado() {
