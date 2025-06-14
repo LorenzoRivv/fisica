@@ -167,4 +167,21 @@ function calcular() {
   }
 
   document.getElementById("resultado").innerHTML = resultado;
+  if(resultado != 'Completá todos los campos.' || resultado){
+    document.getElementById("copiar-btn").style = "display:block;"
+  }
+  
+}
+
+function copiarResultado() {
+  const resultado = document.getElementById("resultado").innerText;
+  if (resultado) {
+    navigator.clipboard.writeText(resultado).then(() => {
+      const btn = document.getElementById("copiar-btn");
+      btn.textContent = "✅ ¡Copiado!";
+      setTimeout(() => {
+        btn.textContent = "📋 Copiar resultado";
+      }, 2000);
+    });
+  }
 }

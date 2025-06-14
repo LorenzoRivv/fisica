@@ -47,3 +47,18 @@ body {
     font-weight: bold;
   }
   
+  #copiar-btn {
+    margin-top: 10px;
+    background-color: #2ecc71;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 15px;
+    color: white;
+    cursor: pointer;    
+  }
+  
+  #copiar-btn:hover {
+    background-color: #27ae60;
+  }
+  

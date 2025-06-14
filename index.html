@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Calculadora Física</title>
   <link rel="stylesheet" href="style.css">
+  
   <script>
     window.MathJax = {
       tex: {
@@ -19,7 +20,8 @@
 </head>
 <body>
   <div class="container">
-    <h1>Calculadora de Física v_1.3</h1>
+    
+    <h1>Calculadora de Física v_2</h1>
 
     <label for="tema">Seleccioná un tema:</label>
     <select id="tema" onchange="cargarFormulas()">
@@ -39,6 +41,7 @@
     <button onclick="calcular()">Calcular</button>
 
     <div id="resultado"></div>
+    <button id="copiar-btn" onclick="copiarResultado()" style="display:none;">📋 Copiar resultado</button>
   </div>
 
   <script src="script.js"></script>
