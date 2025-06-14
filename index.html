@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora Física</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>  
+</head>
+<body>
+  <div class="container">
+    <h1>Calculadora de Física</h1>
+
+    <label for="tema">Seleccioná un tema:</label>
+    <select id="tema" onchange="cargarFormulas()">
+      <option value="">-- Elegí un tema --</option>
+      <option value="cinematica">Cinemática</option>
+      <option value="dinamica">Dinámica</option>
+      <option value="energia">Energía</option>
+    </select>
+
+    <div id="formulas-container" style="display:none;">
+      <label for="formula">Seleccioná una fórmula:</label>
+      <select id="formula" onchange="mostrarCampos()"></select>
+    </div>
+
+    <form id="formulario"></form>
+
+    <button onclick="calcular()">Calcular</button>
+
+    <div id="resultado"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
