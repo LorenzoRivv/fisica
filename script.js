@@ -15,8 +15,8 @@ const formulasPorTema = {
     { id: "calorLatente", nombre: "Calor Latente (Q = m·L)" },
   ],
   electrostatica: [
-    { id: "coulomb", nombre: "Ley de Coulomb (F = k·|q₁·q₂| / r²)" },
-    { id: "campo", nombre: "Campo eléctrico (E = k·|q| / r²)" },
+    { id: "coulomb", nombre: "Ley de Coulomb (F = k·|q₁·q₂| / d²)" },
+    { id: "campo", nombre: "Campo eléctrico (E = k·|q| / d²)" },
     { id: "fuerza_campo", nombre: "Fuerza sobre una carga (F = q·E)" },
   ],
 };
@@ -104,15 +104,15 @@ function mostrarCampos() {
   } else if (formula === "calor") {
     html += `
             <p>$Q = m \\cdot c \\cdot \\Delta T$</p>
-            <label>m (const): <input type="number" id="m"></label>
-            <label>c (const): <input type="number" id="c"></label>
-            <label>ΔT (s): <input type="number" id="T"></label>
+            <label>m (kg): <input type="number" id="m"></label>
+            <label>c (J/kg ºC): <input type="number" id="c"></label>
+            <label>ΔT (ºC): <input type="number" id="T"></label>
         `;
   } else if (formula === "calorLatente") {
     html += `
             <p>$Q = m \\cdot L$</p>
             <label>m (kg): <input type="number" id="m"></label>
-            <label>L (J): <input type="number" id="L"></label>
+            <label>L (J/kg): <input type="number" id="L"></label>
         `;
     //    --- Electrostatica ---
   } else if (formula === "coulomb") {
@@ -120,19 +120,19 @@ function mostrarCampos() {
           <p>$F = k \\cdot \\frac{|q_1 \\cdot q_2|}{d^2}$</p>
           <label>q1 (C): <input type="number" id="q1"></label>
           <label>q2 (C): <input type="number" id="q2"></label>
-          <label>d (m): <input type="number" id="m"></label>
+          <label>d (m): <input type="number" id="d"></label>
       `;
   } else if (formula === "campo") {
     html += `
           <p>$E = k \\cdot \\frac{|q|}{d^2}$</p>
-          <label>m (kg): <input type="number" id="m"></label>
-          <label>v (m/s): <input type="number" id="v"></label>
+          <label>q (C): <input type="number" id="q"></label>
+          <label>d (m): <input type="number" id="d"></label>
       `;
   } else if (formula === "fuerza_campo") {
     html += `
           <p>$F = q \\cdot E$</p>
-          <label>m (kg): <input type="number" id="m"></label>
-          <label>v (m/s): <input type="number" id="v"></label>
+          <label>q (C): <input type="number" id="q"></label>
+          <label>E (m): <input type="number" id="E"></label>
       `;
   }
   formulario.innerHTML = html;
@@ -219,16 +219,58 @@ function calcular() {
     }
 
     //    --- Calorimetria ---
-  } else if (formula === "energia") {
+  } else if (formula === "calor") {
     const m = parseFloat(document.getElementById("m").value);
-    const v = parseFloat(document.getElementById("v").value);
-    if (isNaN(m) || isNaN(v)) {
+    const c = parseFloat(document.getElementById("c").value);
+    const t = parseFloat(document.getElementById("T").value);
+    if (isNaN(m) || isNaN(c) || isNaN(t)) {
       resultado = "Completá todos los campos.";
     } else {
-      const ec = 0.5 * m * v * v;
-      resultado = `Ec = ${ec.toFixed(2)} J`;
+      const Q = m * c * t;
+      resultado = `Q = ${Q.toFixed(2)} J`;
     }
-  }
+  } else if (formula === "calorLatente") {
+    const m = parseFloat(document.getElementById("m").value);
+    const l = parseFloat(document.getElementById("L").value);
+    if (isNaN(m) || isNaN(l)) {
+      resultado = "Completá todos los campos.";
+    } else {
+      const Q = m * l;
+      resultado = `Q = ${Q.toFixed(2)} J`;
+    }
+
+  //    --- Calorimetria ---
+  }else if (formula === "coulomb") {
+    const q1 = parseFloat(document.getElementById("q1").value);
+    const q2 = parseFloat(document.getElementById("q2").value);
+    const d = parseFloat(document.getElementById("d").value);
+    const k = 9*(10**9);
+    if (isNaN(d) || isNaN(q1) || isNaN(q2)) {
+      resultado = "Completá todos los campos.";
+    } else {
+      const F = k * ((q1*q2)/(d**2));
+      resultado = `F = ${F.toFixed(2)} N`;
+    }
+  }else if (formula === "campo") {
+    const q = parseFloat(document.getElementById("q").value);
+    const d = parseFloat(document.getElementById("d").value);
+    const k = 9*(10**9);
+    if (isNaN(q) || isNaN(d)) {
+      resultado = "Completá todos los campos.";
+    } else {
+      const E = (k * q) / (d**2);
+      resultado = `E = ${E.toFixed(2)} N/C`;
+    }
+  }else if (formula === "fuerza_campo") {
+    const m = parseFloat(document.getElementById("m").value);
+    const l = parseFloat(document.getElementById("L").value);
+    if (isNaN(m) || isNaN(l)) {
+      resultado = "Completá todos los campos.";
+    } else {
+      const Q = m * l;
+      resultado = `Q = ${Q.toFixed(2)} J`;
+    }
+  }  
 
   document.getElementById("resultado").innerHTML = resultado;
   if (resultado != "Completá todos los campos." || resultado) {
